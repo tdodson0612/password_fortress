@@ -6,6 +6,7 @@ import '../../models/password_entry.dart';
 
 class PasswordTile extends StatelessWidget {
   final PasswordEntry entry;
+
   final VoidCallback? onTap;
 
   const PasswordTile({
@@ -18,7 +19,8 @@ class PasswordTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
-      leading: const CircleAvatar(
+      leading:
+          const CircleAvatar(
         child: Icon(
           Icons.key,
         ),
@@ -29,6 +31,12 @@ class PasswordTile extends StatelessWidget {
       subtitle: Text(
         entry.username,
       ),
+      trailing:
+          entry.isFavorite
+              ? const Icon(
+                  Icons.star,
+                )
+              : null,
     );
   }
 }

@@ -6,6 +6,7 @@ import '../../models/password_entry.dart';
 
 class PasswordCard extends StatelessWidget {
   final PasswordEntry entry;
+
   final VoidCallback? onTap;
 
   const PasswordCard({
@@ -17,22 +18,52 @@ class PasswordCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: ListTile(
+      child: InkWell(
         onTap: onTap,
-        leading: const Icon(
-          Icons.lock_outline,
+        borderRadius:
+            BorderRadius.circular(16),
+        child: Padding(
+          padding:
+              const EdgeInsets.all(16),
+          child: Row(
+            children: [
+
+              const Icon(
+                Icons.lock_outline,
+              ),
+
+              const SizedBox(
+                width: 12,
+              ),
+
+              Expanded(
+                child: Column(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                  children: [
+
+                    Text(
+                      entry.title,
+                      style:
+                          Theme.of(context)
+                              .textTheme
+                              .titleMedium,
+                    ),
+
+                    Text(
+                      entry.website,
+                    ),
+                  ],
+                ),
+              ),
+
+              if (entry.isFavorite)
+                const Icon(
+                  Icons.star,
+                ),
+            ],
+          ),
         ),
-        title: Text(
-          entry.title,
-        ),
-        subtitle: Text(
-          entry.website,
-        ),
-        trailing: entry.isFavorite
-            ? const Icon(
-                Icons.star,
-              )
-            : null,
       ),
     );
   }
