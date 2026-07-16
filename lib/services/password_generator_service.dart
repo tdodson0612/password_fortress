@@ -23,6 +23,7 @@ class PasswordGeneratorService {
     bool lowercase = true,
     bool numbers = true,
     bool symbols = true,
+    bool avoidAmbiguous = true,
   }) {
     var characters = '';
 
@@ -42,6 +43,13 @@ class PasswordGeneratorService {
       characters += _symbols;
     }
 
+    if (avoidAmbiguous) {
+      characters = characters.replaceAll(
+        RegExp('[Il1O0]'),
+        '',
+      );
+    }
+
     if (characters.isEmpty) {
       return '';
     }
@@ -53,5 +61,19 @@ class PasswordGeneratorService {
       (_) => characters[
           random.nextInt(characters.length)],
     ).join();
+  }
+
+  double calculateEntropy({
+    required String password,
+  }) {
+    if (password.isEmpty) {
+      return 0;
+    }
+
+    final poolSize =
+        password.runes.toSet().length;
+
+    return password.length *
+        (log(poolSize) / log(2));
   }
 }
