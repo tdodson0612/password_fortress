@@ -1,21 +1,28 @@
 // lib/services/encryption/key_storage_service.dart
 
 class KeyStorageService {
-  KeyStorageService();
 
   String? _encryptedKey;
 
-  Future<void> storeEncryptedKey(
-    String key,
+
+  Future<void> storeKey(
+    String encryptedKey,
   ) async {
-    _encryptedKey = key;
+    _encryptedKey = encryptedKey;
   }
+
 
   Future<String?> retrieveKey() async {
     return _encryptedKey;
   }
 
-  Future<void> deleteKey() async {
+
+  Future<void> removeKey() async {
     _encryptedKey = null;
+  }
+
+
+  bool get hasKey {
+    return _encryptedKey != null;
   }
 }
