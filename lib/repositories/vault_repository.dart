@@ -1,21 +1,47 @@
 // lib/repositories/vault_repository.dart
 
-import '../models/password_entry.dart';
+import '../services/storage/vault_storage_service.dart';
 
-abstract class VaultRepository {
-  Future<List<PasswordEntry>> getEntries();
 
-  Future<void> addEntry(
-    PasswordEntry entry,
-  );
+class VaultRepository {
 
-  Future<void> updateEntry(
-    PasswordEntry entry,
-  );
 
-  Future<void> deleteEntry(
-    String id,
-  );
+  final VaultStorageService storage;
 
-  Future<void> clearVault();
+
+  VaultRepository({
+    required this.storage,
+  });
+
+
+
+  Future<void> saveVault(
+    String encryptedData,
+  ) async {
+
+    await storage.saveEncryptedVault(
+      encryptedData,
+    );
+  }
+
+
+
+  Future<String?> loadVault() async {
+
+    return storage.loadEncryptedVault();
+  }
+
+
+
+  Future<void> deleteVault() async {
+
+    await storage.deleteVault();
+  }
+
+
+
+  bool get exists {
+
+    return storage.hasVault;
+  }
 }

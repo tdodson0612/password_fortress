@@ -4,60 +4,157 @@ import 'package:flutter/material.dart';
 
 import '../../models/password_entry.dart';
 
+
+
 class PasswordDetailsScreen
-    extends StatelessWidget {
+    extends StatefulWidget {
+
+
   final PasswordEntry entry;
+
 
   const PasswordDetailsScreen({
     super.key,
     required this.entry,
   });
 
+
+
+  @override
+  State<PasswordDetailsScreen>
+      createState() =>
+          _PasswordDetailsScreenState();
+}
+
+
+
+class _PasswordDetailsScreenState
+    extends State<PasswordDetailsScreen> {
+
+
+  bool showPassword = false;
+
+
+
   @override
   Widget build(BuildContext context) {
+
+
+    final entry =
+        widget.entry;
+
+
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
+
+      appBar:
+          AppBar(
+
+        title:
+            Text(
           entry.title,
         ),
+
       ),
-      body: Padding(
+
+
+      body:
+          ListView(
+
         padding:
             const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
-          children: [
 
-            Text(
+
+        children: [
+
+
+          ListTile(
+            title:
+                const Text(
+              'Website',
+            ),
+
+            subtitle:
+                Text(
               entry.website,
             ),
+          ),
 
-            const SizedBox(
-              height: 12,
+
+
+          ListTile(
+            title:
+                const Text(
+              'Username',
             ),
 
-            Text(
+            subtitle:
+                Text(
               entry.username,
             ),
+          ),
 
-            const SizedBox(
-              height: 12,
+
+
+          ListTile(
+
+            title:
+                const Text(
+              'Password',
             ),
 
-            const Text(
-              '••••••••••',
+            subtitle:
+                Text(
+              showPassword
+                  ? entry.password
+                  : '••••••••',
             ),
 
-            const SizedBox(
-              height: 20,
+
+            trailing:
+                IconButton(
+
+              icon:
+                  Icon(
+
+                showPassword
+                    ? Icons.visibility_off
+                    : Icons.visibility,
+
+              ),
+
+
+              onPressed: () {
+
+                setState(() {
+
+                  showPassword =
+                      !showPassword;
+
+                });
+
+              },
+
+            ),
+          ),
+
+
+
+          ListTile(
+
+            title:
+                const Text(
+              'Notes',
             ),
 
-            Text(
+            subtitle:
+                Text(
               entry.notes,
             ),
-          ],
-        ),
+
+          ),
+
+        ],
       ),
     );
   }

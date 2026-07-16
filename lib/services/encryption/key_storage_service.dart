@@ -1,28 +1,46 @@
 // lib/services/encryption/key_storage_service.dart
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+
 class KeyStorageService {
 
-  String? _encryptedKey;
+
+  final FlutterSecureStorage storage =
+      const FlutterSecureStorage();
+
+
+
+  static const String keyName =
+      'vault_key';
+
 
 
   Future<void> storeKey(
-    String encryptedKey,
+    String key,
   ) async {
-    _encryptedKey = encryptedKey;
+
+    await storage.write(
+      key: keyName,
+      value: key,
+    );
   }
+
 
 
   Future<String?> retrieveKey() async {
-    return _encryptedKey;
+
+    return storage.read(
+      key: keyName,
+    );
   }
 
 
-  Future<void> removeKey() async {
-    _encryptedKey = null;
-  }
 
+  Future<void> deleteKey() async {
 
-  bool get hasKey {
-    return _encryptedKey != null;
+    await storage.delete(
+      key: keyName,
+    );
   }
 }

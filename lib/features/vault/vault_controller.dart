@@ -7,6 +7,7 @@ import '../../services/password_health_service.dart';
 import 'vault_state.dart';
 
 
+
 class VaultController
     extends ChangeNotifier {
 
@@ -19,46 +20,14 @@ class VaultController
   });
 
 
+
   VaultState _state =
       VaultState.initial();
 
 
+
   VaultState get state =>
       _state;
-
-
-
-  List<PasswordEntry>
-      get duplicatePasswords {
-
-    return healthService.findDuplicates(
-      _state.entries,
-    );
-  }
-
-
-
-  void unlock() {
-
-    _state =
-        _state.copyWith(
-      isUnlocked: true,
-    );
-
-    notifyListeners();
-  }
-
-
-
-  void lock() {
-
-    _state =
-        _state.copyWith(
-      isUnlocked: false,
-    );
-
-    notifyListeners();
-  }
 
 
 
@@ -73,9 +42,44 @@ class VaultController
           ..add(entry);
 
 
+
     _state =
         _state.copyWith(
-      entries: updated,
+      entries:
+          updated,
+    );
+
+
+    notifyListeners();
+  }
+
+
+
+  void updatePassword(
+    PasswordEntry updatedEntry,
+  ) {
+
+    final updated =
+        _state.entries.map(
+          (entry) {
+
+            if (entry.id ==
+                updatedEntry.id) {
+
+              return updatedEntry;
+            }
+
+            return entry;
+
+          },
+        ).toList();
+
+
+
+    _state =
+        _state.copyWith(
+      entries:
+          updated,
     );
 
 
@@ -88,21 +92,28 @@ class VaultController
     String id,
   ) {
 
-    final updated =
-        _state.entries
-            .where(
-              (entry) =>
-                  entry.id != id,
-            )
-            .toList();
-
-
     _state =
         _state.copyWith(
-      entries: updated,
+
+      entries:
+          _state.entries
+              .where(
+                (entry) =>
+                    entry.id != id,
+              )
+              .toList(),
+
     );
 
 
     notifyListeners();
   }
+
+
+
+  List<PasswordEntry>
+      get duplicatePasswords =>
+          healthService.findDuplicates(
+            _state.entries,
+          );
 }

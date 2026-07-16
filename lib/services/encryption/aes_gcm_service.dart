@@ -1,45 +1,90 @@
 // lib/services/encryption/aes_gcm_service.dart
 
+import 'dart:convert';
+
+
+import 'package:cryptography/cryptography.dart';
+
+
 import '../../core/crypto/encryption_service.dart';
 
-class AesGcmService implements EncryptionService {
 
-  AesGcmService();
+
+class AesGcmService
+    implements EncryptionService {
+
+
+  final algorithm =
+      AesGcm.with256bits();
+
 
 
   @override
   Future<String> encrypt(
     String plainText,
-    String key,
+    List<int> key,
   ) async {
 
-    /*
-      Future implementation:
 
-      AES-256-GCM
+    final secretBox =
+        await algorithm.encrypt(
+      utf8.encode(
+        plainText,
+      ),
 
-      Requirements:
-      - Random IV every encryption
-      - Authentication tag verification
-      - No key reuse
-    */
+      secretKey:
+          SecretKey(
+        key,
+      ),
+    );
 
-    return plainText;
+
+    return base64Encode(
+      secretBox.concatenation(),
+    );
   }
+
+
 
 
   @override
   Future<String> decrypt(
     String encryptedText,
-    String key,
+    List<int> key,
   ) async {
 
-    /*
-      Future implementation:
 
-      AES-GCM decrypt and verify tag
-    */
+    final bytes =
+        base64Decode(
+      encryptedText,
+    );
 
-    return encryptedText;
+
+    final secretBox =
+        SecretBox.fromConcatenation(
+      bytes,
+
+      nonceLength:
+          algorithm.nonceLength,
+
+      macLength:
+          algorithm.macAlgorithm.macLength,
+    );
+
+
+    final clearText =
+        await algorithm.decrypt(
+      secretBox,
+
+      secretKey:
+          SecretKey(
+        key,
+      ),
+    );
+
+
+    return utf8.decode(
+      clearText,
+    );
   }
 }
